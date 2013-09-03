@@ -39,3 +39,22 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-v
                                     COMPATIBILITY ExactVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
         DESTINATION ${CMAKE_INSTALL_DIR} )
+        
+        
+IF(WIN32)
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "DectrisHdf5-${VERSION}")
+SET(CPACK_PACKAGE_VERSION ${VERSION})
+set(CPACK_PACKAGE_VENDOR Dectris Ltd.)
+set(CPACK_PACKAGE_FILE_NAME DectrisHdf5-${VERSION})
+# Generate guid for every major release
+execute_process(COMMAND
+                python -c "import uuid; print uuid.uuid5(uuid.NAMESPACE_DNS,\"DectrisHdf5-${VERSION}.dectris.com\")"
+                OUTPUT_VARIABLE CPACK_WIX_UPGRADE_GUID
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+MESSAGE(STATUS "WIX Upgrade GUID ${CPACK_WIX_UPGRADE_GUID}" )
+set(CPACK_GENERATOR WIX)
+
+INCLUDE(CPack)
+ENDIF()
+
