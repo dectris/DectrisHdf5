@@ -26,7 +26,7 @@ IF(WIN32)
   SET(CMAKE_INSTALL_DIR cmake/)
 ELSE()
   SET(LIB_INSTALL_DIR lib/ )
-  SET(CMAKE_INSTALL_DIR lib/dectris/cmake/)
+  SET(CMAKE_INSTALL_DIR lib/DectrisHdf5/cmake/)
 ENDIF()
 
 
