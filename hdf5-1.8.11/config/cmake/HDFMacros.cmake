@@ -106,6 +106,7 @@ MACRO (HDF_SET_LIB_OPTIONS libtarget libname libtype)
       RELEASE_OUTPUT_NAME        ${LIB_RELEASE_NAME}
       MINSIZEREL_OUTPUT_NAME     ${LIB_RELEASE_NAME}
       RELWITHDEBINFO_OUTPUT_NAME ${LIB_RELEASE_NAME}
+      INSTALL_RPATH $ORIGIN
   )
   
   #----- Use MSVC Naming conventions for Shared Libraries
