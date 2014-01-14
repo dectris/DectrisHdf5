@@ -1,60 +1,100 @@
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8.11)
-PROJECT(DectrisHdf5)
+#
+#  Dectris Ltd.
+#  Neuenhoferstrasses 107, CH - 5400 Baden, Switzerland.
+#  All rights reserved. Copyright(C) 2012 - 2014
+#
 
-IF(NOT CMAKE_BUILD_TYPE)
-  SET ( CMAKE_BUILD_TYPE Release )
-ENDIF()
+cmake_minimum_required (VERSION 2.8.11)
+project (DectrisHdf5)
 
-SET(VERSION 1.8.11)
+if(NOT CMAKE_BUILD_TYPE)
+  set ( CMAKE_BUILD_TYPE Release )
+endif()
 
+set (VERSION_MAJOR 1)
+set (VERSION_MINOR 8)
+set (VERSION_PATCH 11)
+set (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 # Tell hdf5 that we are manually overriding certain settings
-SET(HDF5_EXTERNALLY_CONFIGURED 1)
+set(HDF5_EXTERNALLY_CONFIGURED 1)
+
 # Avoid duplicating names of installed libraries
-SET(HDF5_EXTERNAL_LIB_PREFIX "dectris")
+set(HDF5_EXTERNAL_LIB_PREFIX "dectris")
 
 # set options for bulding hdf5
-SET (BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries")
-SET (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
-SET (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
+set (BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries")
+set (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
+set (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
+
 # Add the sub project
-ADD_SUBDIRECTORY(hdf5-${VERSION})
+add_subdirectory (hdf5-${VERSION})
 
-SET(INCLUDE_INSTALL_DIR include/  )
-IF(WIN32)
-  SET(LIB_INSTALL_DIR bin/ )
-  SET(CMAKE_INSTALL_DIR cmake/)
-ELSE()
-  SET(LIB_INSTALL_DIR lib/ )
-  SET(CMAKE_INSTALL_DIR lib/DectrisHdf5/cmake/)
-ENDIF()
+set (INCLUDE_INSTALL_DIR include/  )
+if (WIN32)
+  set (LIB_INSTALL_DIR bin/ )
+  set (CMAKE_INSTALL_DIR cmake/)
+else ()
+  set (CMAKE_INSTALL_PREFIX "/usr/local")
+  set (CMAKE_INSTALL_DIR lib/DectrisHdf5/cmake/)
+  set (LIB_INSTALL_DIR lib/ )
+endif ()
 
 
-include(CMakePackageConfigHelpers)
-configure_package_config_file(cmake/DectrisHdf5Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake
-                                 INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
-                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
-                                    VERSION ${VERSION}
-                                    COMPATIBILITY ExactVersion )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
-        DESTINATION ${CMAKE_INSTALL_DIR} )
-        
-        
-IF(WIN32)
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "DectrisHdf5-${VERSION}")
-SET(CPACK_PACKAGE_VERSION ${VERSION})
-set(CPACK_PACKAGE_VENDOR Dectris Ltd.)
-set(CPACK_PACKAGE_FILE_NAME DectrisHdf5-${VERSION})
-# Generate guid for every major release
-execute_process(COMMAND
-                python -c "import uuid; print uuid.uuid5(uuid.NAMESPACE_DNS,\"DectrisHdf5-${VERSION}.dectris.com\")"
-                OUTPUT_VARIABLE CPACK_WIX_UPGRADE_GUID
-                OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-MESSAGE(STATUS "WIX Upgrade GUID ${CPACK_WIX_UPGRADE_GUID}" )
-set(CPACK_GENERATOR WIX)
+include (CMakePackageConfigHelpers)
+configure_package_config_file (cmake/DectrisHdf5Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake
+                               INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
+                               PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+write_basic_package_version_file (${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
+                                  VERSION ${VERSION}
+                                  COMPATIBILITY ExactVersion )
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
+         DESTINATION ${CMAKE_INSTALL_DIR} )
+       
+#
+# Generic Package Information
+#
+#set(CPACK_SET_DESTDIR true)
+#set(CMAKE_INSTALL_PREFIX "/")
+set (CPACK_PACKAGE_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+set (CPACK_PACKAGE_NAME "DectrisHdf5")
+set (CPACK_PACKAGE_RELEASE "beta")
+set (CPACK_PACKAGE_VENDOR "Dectris Ltd.")
+set (CPACK_PACKAGE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
-INCLUDE(CPack)
-ENDIF()
+set (CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+set (CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}")
 
+#
+# OS Specific Package Information
+#
+# Windows
+if (WIN32)
+  # Generate guid for every major release
+  execute_process (COMMAND
+    python -c "import uuid; print uuid.uuid5(uuid.NAMESPACE_DNS,\"DectrisHdf5-${VERSION}.dectris.com\")"
+    OUTPUT_VARIABLE CPACK_WIX_UPGRADE_GUID
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+  message (STATUS "WIX Upgrade GUID ${CPACK_WIX_UPGRADE_GUID}" )
+  set (CPACK_GENERATOR WIX)
+endif()
+
+# Linux
+if (UNIX)
+  message (STATUS "> Creating RPM ${CPACK_PACKAGE_FILE_NAME}")
+  set (CPACK_GENERATOR RPM)
+endif ()
+
+include (CPack)
+
+#
+# Uninstall Target
+#
+configure_file(
+    "cmake/cmake_uninstall.cmake.in"
+    "cmake/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P cmake/cmake_uninstall.cmake)
