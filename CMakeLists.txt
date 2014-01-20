@@ -3,6 +3,8 @@
 #  Neuenhoferstrasses 107, CH - 5400 Baden, Switzerland.
 #  All rights reserved. Copyright(C) 2012 - 2014
 #
+#
+
 
 cmake_minimum_required (VERSION 2.8.11)
 project (DectrisHdf5)
