@@ -36,18 +36,20 @@ add_subdirectory (hdf5-${VERSION})
 set (INCLUDE_INSTALL_DIR include/  )
 if (WIN32)
   set (LIB_INSTALL_DIR bin/ )
+  set (STATIC_INSTALL_DIR lib/ )
   set (CMAKE_INSTALL_DIR cmake/)
 else ()
   set (CMAKE_INSTALL_PREFIX "/usr/local")
   set (CMAKE_INSTALL_DIR lib/DectrisHdf5/cmake/)
   set (LIB_INSTALL_DIR lib/ )
+  set (STATIC_INSTALL_DIR lib/ )
 endif ()
 
 
 include (CMakePackageConfigHelpers)
 configure_package_config_file (cmake/DectrisHdf5Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake
                                INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
-                               PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+                               PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR STATIC_INSTALL_DIR)
 write_basic_package_version_file (${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
                                   VERSION ${VERSION}
                                   COMPATIBILITY ExactVersion )
