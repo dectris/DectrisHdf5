@@ -27,7 +27,7 @@ set(HDF5_EXTERNAL_LIB_PREFIX "dectris")
 set (BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries")
 set (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
 set (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
-
+set (HDF5_BUILD_CPP_LIB ON CACHE BOOL "Build c++ API")
 # Add the sub project
 add_subdirectory (hdf5-${VERSION})
 
