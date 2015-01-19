@@ -38,21 +38,35 @@ if (WIN32)
   set (CMAKE_INSTALL_DIR cmake/)
 else ()
   set (CMAKE_INSTALL_PREFIX "/usr/local")
-  set (CMAKE_INSTALL_DIR lib/DectrisHdf5/cmake/)
+  IF (CMAKE_BUILD_TYPE MATCHES Debug)
+     set (CMAKE_INSTALL_DIR lib/DectrisHdf5Debug/cmake/)
+  ELSE()
+     set (CMAKE_INSTALL_DIR lib/DectrisHdf5/cmake/)
+  ENDIF()
   set (LIB_INSTALL_DIR lib/ )
   set (STATIC_INSTALL_DIR lib/ )
 endif ()
 
-
 include (CMakePackageConfigHelpers)
-configure_package_config_file (cmake/DectrisHdf5Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake
-                               INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
-                               PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR STATIC_INSTALL_DIR)
-write_basic_package_version_file (${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
-                                  VERSION ${VERSION}
-                                  COMPATIBILITY ExactVersion )
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
-         DESTINATION ${CMAKE_INSTALL_DIR} )
+IF (CMAKE_BUILD_TYPE MATCHES Debug)
+   configure_package_config_file (cmake/DectrisHdf5DebugConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5DebugConfig.cmake
+                                 INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
+                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR STATIC_INSTALL_DIR)
+   write_basic_package_version_file (${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5DebugConfig-version.cmake
+                                    VERSION ${VERSION}
+                                    COMPATIBILITY ExactVersion )
+   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5DebugConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5DebugConfig-version.cmake
+            DESTINATION ${CMAKE_INSTALL_DIR} )
+ELSE()
+   configure_package_config_file (cmake/DectrisHdf5Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake
+                                 INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
+                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR STATIC_INSTALL_DIR)
+   write_basic_package_version_file (${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
+                                    VERSION ${VERSION}
+                                    COMPATIBILITY ExactVersion )
+   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/DectrisHdf5Config-version.cmake
+            DESTINATION ${CMAKE_INSTALL_DIR} )
+ENDIF()
        
 #
 # Generic Package Information
