@@ -100,8 +100,9 @@ endif ()
 #
 # Windows
 if (WIN32)
+  # Only VolP is allowed to change anything in this section
   set (CPACK_PACKAGE_NAME "DectrisHdf5")
-
+  set (CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
   # Generate guid for every major release
   execute_process (COMMAND
     python -c "import uuid; print uuid.uuid5(uuid.NAMESPACE_DNS,\"DectrisHdf5-${VERSION}.dectris.com\")"
