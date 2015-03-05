@@ -20,7 +20,7 @@ set (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 if (APPLE)
   set (CMAKE_CXX_FLAGS_RELEASE "-O3  -mmacosx-version-min=10.7")
   set (CMAKE_EXE_LINKER_FLAGS "-O3 -mmacosx-version-min=10.7")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11")
 endif ()
 
 
