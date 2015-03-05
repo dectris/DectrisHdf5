@@ -4,7 +4,9 @@ PROJECT (HDF5_CPP)
 #-----------------------------------------------------------------------------
 # Apply Definitions to compiler in this directory and below
 #-----------------------------------------------------------------------------
-ADD_DEFINITIONS (${HDF5_EXTRA_C_FLAGS})
+IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+  ADD_DEFINITIONS (${HDF5_C_EXTRA_FLAGS})
+ENDIF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
 #-----------------------------------------------------------------------------
 # Shared/Static Libs
