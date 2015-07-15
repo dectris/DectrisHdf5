@@ -23,12 +23,20 @@ set(HDF5_EXTERNALLY_CONFIGURED 1)
 # Avoid duplicating names of installed libraries
 set(HDF5_EXTERNAL_LIB_PREFIX "dectris")
 
+SET (HDF5_ENABLE_Z_LIB_SUPPORT ON CACHE BOOL "Enable Zlib Filters")
+
+
 # set options for bulding hdf5
 set (BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries")
 set (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
 set (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
 set (HDF5_BUILD_CPP_LIB ON CACHE BOOL "Build c++ API")
 # Add the sub project
+  SET(CMAKE_PREFIX_PATH
+      C:/
+      C:/zlib
+      )
+
 add_subdirectory (hdf5-${VERSION})
 
 set (INCLUDE_INSTALL_DIR include/  )
@@ -101,6 +109,12 @@ endif ()
 # Windows
 if (WIN32)
   # Only VolP is allowed to change anything in this section
+  SET(CMAKE_PREFIX_PATH
+      C:/
+      C:/zlib
+      )
+  SET(CMAKE_LIBRARY_PATH c:/zlib/bin)
+  SET(CMAKE_INCLUDE_PATH c:/zlib/include)
   set (CPACK_PACKAGE_NAME "DectrisHdf5")
   set (CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
   # Generate guid for every major release
