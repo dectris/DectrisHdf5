@@ -53,10 +53,21 @@ set (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
 set (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
 set (HDF5_BUILD_CPP_LIB ON CACHE BOOL "Build c++ API")
 # Add the sub project
-  SET(CMAKE_PREFIX_PATH
-      C:/
-      C:/zlib
-      )
+#  SET(CMAKE_PREFIX_PATH
+#      C:/
+#      C:/zlib
+#      )
+
+add_subdirectory (zlib-1.2.8)
+IF(HDF5_ENABLE_Z_LIB_SUPPORT)
+     # We must tell the main HDF5 library that it depends on our zlib
+     SET(HDF5_LIB_DEPENDENCIES zlib zlibstatic)
+     # Override the zlib header file
+     SET(H5_ZLIB_HEADER "zlib.h")
+     # Set vars that FindZlib would have set if used in sub project
+    SET(ZLIB_INCLUDE_DIRS "${zlib_INCLUDE_DIRS}")
+    SET(ZLIB_LIBRARIES zlib)
+ENDIF(HDF5_ENABLE_Z_LIB_SUPPORT)
 
 add_subdirectory (hdf5-${VERSION})
 
@@ -130,12 +141,6 @@ endif ()
 # Windows
 if (WIN32)
   # Only VolP is allowed to change anything in this section
-  SET(CMAKE_PREFIX_PATH
-      C:/
-      C:/zlib
-      )
-  SET(CMAKE_LIBRARY_PATH c:/zlib/bin)
-  SET(CMAKE_INCLUDE_PATH c:/zlib/include)
   set (CPACK_PACKAGE_NAME "DectrisHdf5")
   set (CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
   # Generate guid for every major release
