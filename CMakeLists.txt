@@ -49,6 +49,28 @@ set (BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries")
 set (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
 set (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
 set (HDF5_BUILD_CPP_LIB ON CACHE BOOL "Build c++ API")
+set (HDF5_ENABLE_Z_LIB ON CACHE BOOL "Enable zlib")
+
+if(WIN32)
+    ### INSTALL ZLIB ON WINDOWS
+    #
+    #  Download from http://zlib.net/zlib128.zip and extract to zlib128
+    #  cd zlib128
+    #  mk build
+    #  cd build
+    #  cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=zlib128 ..\zlib-1.2.8
+    #  mingw32-make -j8
+    #  mingw32-make install
+    #  cp -r zlib128 C:\
+    #
+    #  change path variable (as administrator)
+    #  $oldPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+    #  $newPath=$oldPath+';C:\zlib128\bin'
+    #  Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $newPath
+    #
+    #
+    set(CMAKE_PREFIX_PATH C:/zlib128 )
+endif()
 # Add the sub project
 add_subdirectory (hdf5-${VERSION})
 
