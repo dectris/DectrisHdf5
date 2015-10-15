@@ -130,7 +130,7 @@ if (UNIX)
   set (CPACK_PACKAGE_RELEASE            $ENV{BUILD_NUMBER})
   set (CPACK_RPM_PACKAGE_RELEASE        $ENV{BUILD_NUMBER})
 
-  set (CPACK_RPM_PACKAGE_REQUIRES      "dectris-h5py")
+  set (CPACK_RPM_PACKAGE_REQUIRES      "dectris-h5py, zlib-devel")
 
   message (STATUS "> Creating RPM ${CPACK_PACKAGE_FILE_NAME}")
   set (CPACK_GENERATOR RPM)
