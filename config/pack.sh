@@ -19,10 +19,3 @@ echo $BUILD_NUMBER
 echo $COMPILER_NAME
 cmake ../ -DCMAKE_BUILD_TYPE=$BUILD_TYPE;
 make -j $CPUs package 
-
-# Archive Artifact
-#ORIGINAL_PACKAGE_NAME=$(ls -1 *.rpm)
-#PACKAGE_NAME=$(basename *.rpm .rpm)"_b"${BUILD_NUMBER}.rpm
-
-# Copy package in the local repository (which is NFS for the time being)
-cp *.rpm /mnt/NFS/
