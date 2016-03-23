@@ -55,7 +55,7 @@ while getopts ":t:h:n:c:b:a:d" o; do
 done
 
 shift $((OPTIND-1))
-echo "Compiling and packaging shortcuts"
+echo "[Compiling and packaging shortcuts]"
 echo ""
 
 TIMESTAMP=$(date +%s)
@@ -85,8 +85,12 @@ DIST_TAG=".$(rpm --showrc | grep dist| grep '\.el' | awk -F ' ' '{print $3}' | c
 
 BUILD_NUMBER="${BUILD_NUMBER}.git${GIT_HASH}${DIST_TAG}"
 
+
+# 
+echo "[Resolving Building dependencies]"
 ./.ci/satiate.sh
-# Build
+
+echo "[Running CMake]"
 if [[ -z $DEVELOPER_MODE ]]; then 
     rm -rf build
 fi
@@ -95,8 +99,11 @@ rm *.rpm
 mkdir build
 cd build
 
-cmake ../ || exit
-# && make -j$NCPUs package
+
+cmake ../ && make -j$NCPUs package || exit
+
+
+echo "[Handling Artifacts]"
 RPMNAME=$(basename *.git${GIT_HASH}*.rpm  | sed 's/.x86_64.rpm//g' )".x86_64.rpm"
 
 mv *.git${GIT_HASH}*.rpm $RPMNAME
