@@ -39,7 +39,7 @@ else
 fi
 
 echo "Starting Docker Builder [${DOCKER_BUILDER_CMD}]"
-docker run $DOCKER_BUILDER_CMD
+docker run $DOCKER_BUILDER_CMD_OPT  || exit
 docker wait $BUILDER_NAME
 docker logs -f $BUILDER_NAME
 echo "Removing Docker Builder"
