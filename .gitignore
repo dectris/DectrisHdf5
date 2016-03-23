@@ -1,0 +1,17 @@
+/nbproject
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile
+core
+!core/
+*~
+*.so
+*.a
+*.pyc
+/build/
+#*
+/.idea/
+*.rpm
+.#*
+__pycache__/*
