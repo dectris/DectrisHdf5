@@ -95,8 +95,8 @@ rm *.rpm
 mkdir build
 cd build
 
-cmake ../ && make -j$NCPUs package || exit
-
+cmake ../ || exit
+# && make -j$NCPUs package
 RPMNAME=$(basename *.git${GIT_HASH}*.rpm  | sed 's/.x86_64.rpm//g' )".x86_64.rpm"
 
 mv *.git${GIT_HASH}*.rpm $RPMNAME
