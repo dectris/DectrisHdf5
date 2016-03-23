@@ -8,11 +8,15 @@ popd > /dev/null
 pushd $SCRIPT_PATH/.. > /dev/null
 
 # Fetch the code
-TYPES=$(grep CMAKE_BUILD_TYPE ./CMakeLists.txt | grep STREQUAL | grep -v "#" | tr -d '()"${}' |  awk -F " " '{print $4" "}'| tr -d '\n')
+# TYPES=$(grep CMAKE_BUILD_TYPE ./CMakeLists.txt | grep STREQUAL | grep -v "#" | tr -d '()"${}' |  awk -F " " '{print $4" "}'| tr -d '\n')
+
+# Fetch the available SCLs
+SCL_LIST=$(scl -l | grep devtoolset | tr '\n' ' ')
 
 usage() {
     echo "Usage: $0 -t <system_type> -c <number_of_cpus>"
     echo "   -n number of CPU to use"
+    echo "   -c SCL compiler to use: [ $SCL_LIST]"
     echo "   -b Build number to assign"
     echo "   -a artifact destination"
     echo "   -d don't purge build folder before and after building"
@@ -23,6 +27,9 @@ while getopts ":t:h:n:c:b:a:d" o; do
         a)
             export ARTIFACT_DESTINATION=${OPTARG}
 	    ;;
+	c)
+            SCL_COMPILER=${OPTARG}
+            ;;
         d)
             export DEVELOPER_MODE=true
 	    ;;
@@ -50,6 +57,12 @@ echo ""
 TIMESTAMP=$(date +%s)
 DATE=$(date +%Y%m%d)
 
+if [[ -z "${SCL_COMPILER}" ]] ; then
+    echo "Using default compiler"
+else
+    echo "Using $SCL_COMPILER"
+    source /opt/centos/${SCL_COMPILER}/enable
+fi
 
 if [[ -z "${BUILD_NUMBER}" ]] ; then
     export BUILD_NUMBER=$TIMESTAMP
