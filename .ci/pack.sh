@@ -11,7 +11,11 @@ pushd $SCRIPT_PATH/.. > /dev/null
 # TYPES=$(grep CMAKE_BUILD_TYPE ./CMakeLists.txt | grep STREQUAL | grep -v "#" | tr -d '()"${}' |  awk -F " " '{print $4" "}'| tr -d '\n')
 
 # Fetch the available SCLs
-SCL_LIST=$(scl -l | grep devtoolset | tr '\n' ' ')
+SCL_CMD="/usr/bin/scl"
+command -v $SCL_CMD  >/dev/null 2>&1
+if [ $? == 0 ]; then
+    SCL_LIST=$(scl -l | grep devtoolset | tr '\n' ' ')
+fi
 
 usage() {
     echo "Usage: $0 -t <system_type> -c <number_of_cpus>"
