@@ -24,6 +24,7 @@ echo "Local path:   $(pwd)"
 echo "Docker:       $(docker -v)"
 echo "Builder HW:   $(hostname) ("$(python -c 'import socket; s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); s.connect(("192.168.50.1",80)); print(s.getsockname()[0]); s.close()')")"
 echo "Builder Name: ${DOCKER_BUILDER}"
+echo "OS_VERSION:   ${OS_VERSION}"
 
 
 docker rm $BUILDER_NAME 2&>/dev/null || true 
@@ -34,7 +35,7 @@ elif [[ "${OS_VERSION}" == "7.2" ]]; then
     DOCKER_BUILDER_CMD="docker run --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs}"
 else
     echo "'${OS_VERSION}' not supported" 
-    exit(1)
+    exit 1
 fi
 
 echo "Starting Docker Builder [${DOCKER_BUILDER_CMD}]"
