@@ -29,17 +29,17 @@ echo "OS_VERSION:   ${OS_VERSION}"
 
 docker rm $BUILDER_NAME 2&>/dev/null || true 
 if   [[ "${OS_VERSION}" == "el_6.5" ]]; then 
-    DOCKER_BUILDER_CMD="docker run --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs} -c devtoolset-1.1"
+    DOCKER_BUILDER_CMD_OPT=" --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs} -c devtoolset-1.1"
 
 elif [[ "${OS_VERSION}" == "el_7.2" ]]; then 
-    DOCKER_BUILDER_CMD="docker run --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs}"
+    DOCKER_BUILDER_CMD_OPT=" --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs}"
 else
     echo "'${OS_VERSION}' not supported" 
     exit 1
 fi
 
 echo "Starting Docker Builder [${DOCKER_BUILDER_CMD}]"
-$DOCKER_BUILDER_CMD
+docker run $DOCKER_BUILDER_CMD
 docker wait $BUILDER_NAME
 docker logs -f $BUILDER_NAME
 echo "Removing Docker Builder"

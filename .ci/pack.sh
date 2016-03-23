@@ -56,10 +56,10 @@ done
 
 shift $((OPTIND-1))
 echo "[Compiling and packaging shortcuts]"
-echo ""
 
 TIMESTAMP=$(date +%s)
 DATE=$(date +%Y%m%d)
+echo ${DATE}" "${TIMESTAMP}
 
 if [[ -z "${SCL_COMPILER}" ]] ; then
     echo "Using default compiler"
@@ -104,9 +104,8 @@ cmake ../ && make -j$NCPUs package || exit
 
 
 echo "[Handling Artifacts]"
-RPMNAME=$(basename *.git${GIT_HASH}*.rpm  | sed 's/.x86_64.rpm//g' )".x86_64.rpm"
-
-mv *.git${GIT_HASH}*.rpm $RPMNAME
+# RPMNAME=$(basename *.git${GIT_HASH}*.rpm  | sed 's/.x86_64.rpm//g' )".x86_64.rpm"
+# mv *.git${GIT_HASH}*.rpm $RPMNAME
 
 if [[ -z "${ARTIFACT_DESTINATION}" ]] ; then
     cp *.rpm ../
