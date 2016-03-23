@@ -27,7 +27,15 @@ echo "Builder Name: ${DOCKER_BUILDER}"
 
 
 docker rm $BUILDER_NAME 2&>/dev/null || true 
-DOCKER_BUILDER_CMD="docker run --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER}"
+if   [[ "${OS_VERSION}" == "6.5" ]]; then 
+    DOCKER_BUILDER_CMD="docker run --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs} -c devtoolset-1.1"
+
+elif [[ "${OS_VERSION}" == "7.2" ]]; then 
+    DOCKER_BUILDER_CMD="docker run --privileged=true  --name $BUILDER_NAME -v $(pwd):/scratch -t ${DOCKER_BUILDER} /scratch/.ci/pack.sh -b ${BUILD_NUMBER} -n ${NCPUs}"
+else
+    echo "'${OS_VERSION}' not supported" 
+    exit(1)
+fi
 
 echo "Starting Docker Builder [${DOCKER_BUILDER_CMD}]"
 $DOCKER_BUILDER_CMD
