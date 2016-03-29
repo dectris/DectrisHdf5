@@ -1,4 +1,4 @@
-# 
+#!/bin/bash 
 #
 # Basic implementation of package dependency resolvement for the docker builder
 #
@@ -12,6 +12,10 @@
 
 #getting list of rpm dependencies from the RPM variable in the CMakefile
 full_list=$(grep CPACK_RPM_PACKAGE_REQUIRES CMakeLists.txt | awk -F'CPACK_RPM_PACKAGE_REQUIRES' '{print $2}' | sed 's/"//g' | sed 's/)//g' | sed 's/ = /==/g'| sed 's/ //g' | sed 's/,/ /g')
+full_list="${full_list} "$(grep CPACK_BUILD_RPM_PACKAGE_REQUIRES CMakeLists.txt | awk -F'CPACK_BUILD_RPM_PACKAGE_REQUIRES' '{print $2}' | sed 's/"//g' | sed 's/)//g' | sed 's/ = /==/g'| sed 's/ //g' | sed 's/,/ /g')
+
+DIST_TAG=".$(rpm --showrc | grep dist| grep '\.el' | awk -F ' ' '{print $3}' | cut -d "." -f2)"
+full_list=$(eval "echo $full_list")
 for i in $full_list; do
     operators=">= <= =="
     for operator in $operators; do
@@ -34,9 +38,17 @@ for i in $full_list; do
     # echo $package
     list="$list $package"
 done
-echo "[echo]  >yum install -y $list"
-yum install -y $list
 
-# list=$(echo $full | sed 's/>=/-/g'| sed 's/==/-/g')
-# yum install  $list 
-# echo $full_list
+yum clean all
+# Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=736694 as suggested in 
+# http://serverfault.com/questions/694942/yum-should-error-when-a-package-is-not-available
+for pkg in ${list}; do
+    # Stop executing if at least one package isn't available:
+    echo "[echo] > yum info ${pkg}  || echo 'Error fetching info for [${pkg}]'; exit 1"
+    yum info ${pkg} ||  exit $?
+done
+
+echo "[echo] > yum install -y $list"
+yum install -y $list || exit $?
+
+

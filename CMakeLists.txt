@@ -131,7 +131,10 @@ if (UNIX)
   set (CPACK_PACKAGE_RELEASE            $ENV{BUILD_NUMBER})
   set (CPACK_RPM_PACKAGE_RELEASE        $ENV{BUILD_NUMBER})
 
-  set (CPACK_RPM_PACKAGE_REQUIRES      "make, zlib-devel")
+  set (CPACK_RPM_PACKAGE_REQUIRES      "zlib")
+  # This is not actually used by cmake but enlists the packages needed for building (in addition to the ones
+  # listed above) but not used for running. This information is processes by the "satiate.sh" script
+  set (CPACK_BUILD_RPM_PACKAGE_REQUIRES "make, zlib-devel")
 
   message (STATUS "> Creating RPM ${CPACK_PACKAGE_FILE_NAME}")
   set (CPACK_GENERATOR RPM)
