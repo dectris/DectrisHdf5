@@ -99,9 +99,14 @@ rm *.rpm
 mkdir build
 cd build
 
+echo "> cmake "
+cmake ../ || exit
 
-cmake ../ && make -j$NCPUs package || exit
+echo "> make -j ${NCPUs} || exit"
+make -j ${NCPUs} || exit
 
+echo "> make package || exit"
+make package || exit
 
 echo "[Handling Artifacts]"
 # RPMNAME=$(basename *.git${GIT_HASH}*.rpm  | sed 's/.x86_64.rpm//g' )".x86_64.rpm"
