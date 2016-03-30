@@ -142,6 +142,10 @@ if (UNIX)
   set (CPACK_PACKAGE_INSTALL_PREFIX    "${CMAKE_INSTALL_PREFIX}")
   set (CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 
+  # Exclude system folders to fix problem with CPack >2.8.11 and RPM 4.11.1
+  # which are by default taking over control of system folders....
+  set (CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST "/usr/local" "/usr/local/lib" "/usr/local/include")
+
 endif ()
 
 #
