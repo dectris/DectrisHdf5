@@ -11,8 +11,8 @@
 
 
 #getting list of rpm dependencies from the RPM variable in the CMakefile
-full_list=$(grep CPACK_RPM_PACKAGE_REQUIRES CMakeLists.txt | awk -F'CPACK_RPM_PACKAGE_REQUIRES' '{print $2}' | sed 's/"//g' | sed 's/)//g' | sed 's/ = /==/g'| sed 's/ //g' | sed 's/,/ /g')
-full_list="${full_list} "$(grep CPACK_BUILD_RPM_PACKAGE_REQUIRES CMakeLists.txt | awk -F'CPACK_BUILD_RPM_PACKAGE_REQUIRES' '{print $2}' | sed 's/"//g' | sed 's/)//g' | sed 's/ = /==/g'| sed 's/ //g' | sed 's/,/ /g')
+full_list=$(grep "(CPACK_RPM_PACKAGE_REQUIRES" CMakeLists.txt                      | awk -F'CPACK_RPM_PACKAGE_REQUIRES'       '{print $2}' | sed 's/"//g' | sed 's/)//g' | sed 's/ = /==/g'| sed 's/ //g' | sed 's/,/ /g')
+full_list="${full_list} "$(grep "(CPACK_BUILD_RPM_PACKAGE_REQUIRES" CMakeLists.txt | awk -F'CPACK_BUILD_RPM_PACKAGE_REQUIRES' '{print $2}' | sed 's/"//g' | sed 's/)//g' | sed 's/ = /==/g'| sed 's/ //g' | sed 's/,/ /g')
 
 DIST_TAG=".$(rpm --showrc | grep dist| grep '\.el' | awk -F ' ' '{print $3}' | cut -d "." -f2)"
 full_list=$(eval "echo $full_list")
