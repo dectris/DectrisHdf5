@@ -2,6 +2,7 @@
 #
 # Jenkins Job Build Script call
 #
+set -e
 
 # Fetch project name from the CMakeList.txt file
 PROJECT_NAME=$(grep -i "project (" CMakeLists.txt  | awk -F "[)]| |[(]" '{print $3}'); 
@@ -38,10 +39,11 @@ else
     exit 1
 fi
 
-echo "Starting Docker Builder [${DOCKER_BUILDER_CMD}]"
-docker run $DOCKER_BUILDER_CMD_OPT  || exit
+echo "Starting Docker Builder [${DOCKER_BUILDER_CMD_OPT}]"
+docker run $DOCKER_BUILDER_CMD_OPT  || exit $?
 docker wait $BUILDER_NAME
-docker logs -f $BUILDER_NAME
+# echo "Logging Output [${DOCKER_BUILDER_CMD_OPT}]"
+# docker logs -f $BUILDER_NAME
 echo "Removing Docker Builder"
 docker rm $BUILDER_NAME 2&>/dev/null || true 
 
