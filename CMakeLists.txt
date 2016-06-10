@@ -74,13 +74,14 @@ endif()
 # Add the sub project
 add_subdirectory (hdf5-${VERSION})
 
+# add_subdirectory(playground)
+
 set (INCLUDE_INSTALL_DIR include/  )
 if (WIN32)
   set (LIB_INSTALL_DIR bin/ )
   set (STATIC_INSTALL_DIR lib/ )
   set (CMAKE_INSTALL_DIR cmake/)
 else ()
-  set (CMAKE_INSTALL_PREFIX "/usr/local")
   IF (CMAKE_BUILD_TYPE MATCHES Debug)
      set (CMAKE_INSTALL_DIR lib/DectrisHdf5Debug/cmake/)
   ELSE()
