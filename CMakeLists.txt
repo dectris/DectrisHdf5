@@ -72,6 +72,7 @@ if(WIN32)
     set(CMAKE_PREFIX_PATH C:/zlib128 )
 endif()
 # Add the sub project
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subdirectory (hdf5-${VERSION})
 
 # add_subdirectory(playground)
