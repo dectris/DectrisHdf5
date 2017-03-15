@@ -4,7 +4,7 @@ DectrisHdf5
 Dectris Hdf5 Library
 
 ## Build
-### Prerequesites
+### Prerequisites
 * gcc-4.8
 * cmake 3.6
 ### Building
