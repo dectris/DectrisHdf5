@@ -25,18 +25,11 @@ else()
     MESSAGE(STATUS "Compiling with c++11 OFF")
 endif()
 
-
 if (APPLE)
   set (CMAKE_CXX_FLAGS_RELEASE "-O3  -mmacosx-version-min=10.7")
   set (CMAKE_EXE_LINKER_FLAGS "-O3 -mmacosx-version-min=10.7")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
-
-
-
-
-
-
 
 # Tell hdf5 that we are manually overriding certain settings
 set(HDF5_EXTERNALLY_CONFIGURED 1)
@@ -50,6 +43,7 @@ set (HDF5_BUILD_TOOLS ON CACHE BOOL "Build HDF5 Tools")
 set (HDF5_BUILD_HL_LIB ON CACHE BOOL "Build HIGH Level HDF5 Library")
 set (HDF5_BUILD_CPP_LIB ON CACHE BOOL "Build c++ API")
 set (HDF5_ENABLE_Z_LIB_SUPPORT ON CACHE BOOL "Enable zlib")
+set (HDF5_INSTALL_INCLUDE_DIR include/dectrishdf5)
 
 if(WIN32)
     ### INSTALL ZLIB ON WINDOWS
@@ -77,7 +71,7 @@ add_subdirectory (hdf5-${VERSION})
 
 # add_subdirectory(playground)
 
-set (INCLUDE_INSTALL_DIR include/  )
+set (INCLUDE_INSTALL_DIR ${HDF5_INSTALL_INCLUDE_DIR})
 if (WIN32)
   set (LIB_INSTALL_DIR bin/ )
   set (STATIC_INSTALL_DIR lib/ )
